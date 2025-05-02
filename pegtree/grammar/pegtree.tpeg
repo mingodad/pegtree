@@ -2,7 +2,7 @@
 
 File = __ Source EOF
 
-S = [ \t　]   // Zenkaku Space
+S = [ \t]   // Zenkaku Space
 __ = (S / [\r\n] / COMMENT)*
 _ = (S / COMMENT)*
 COMMENT = '/*' (!'*/' .)* '*/' / ('//' / '%%') (!EOL .)*
@@ -52,7 +52,7 @@ Identifier = {
 
 NAME = [A-Za-z_] [A-Za-z0-9_.]*
 
-UNAME = (![(){}^[\]&! \t　\r\n/|*+?.'"@:#] .)+
+UNAME = (![(){}^[\]&! \t\r\n/|*+?.'"@:#] .)+
 
 example Expression a b / c
 example Expression a b || c
@@ -88,7 +88,7 @@ Node = {
   #Node
 }
 
-Tag = '#' { (![ \t　\r\n}] .)+ #Tag }
+Tag = '#' { (![ \t\r\n}] .)+ #Tag }
 
 Fold = {
   '{' _ ('^' __ / __ edge: (Identifier ':' _ '^' __) )

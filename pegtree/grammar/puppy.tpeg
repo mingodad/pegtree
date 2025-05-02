@@ -17,7 +17,7 @@ Source = EOL? {
 
 EOF          = !.
 LF           = '\n' / EOF
-S            = [ \t\u200B\v\r　]
+S            = [ \t\u200B\v\r]
 
 _            = ( S / BLOCKCOMMENT / LINECOMMENT )*
 __           = ( S / '\n' / BLOCKCOMMENT / LINECOMMENT )*
@@ -27,7 +27,7 @@ BLOCKCOMMENT = '/*' ( !'*/' . )* '*/'
 LINECOMMENT  = [#＃] ( !LF . )*
 
 EOL          = _ LF (_ LF)*
-INDENT       = '\n' [ \t　]+
+INDENT       = '\n' [ \t]+
 
 Statement = 
     / ClassDecl

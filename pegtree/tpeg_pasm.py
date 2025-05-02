@@ -2,11 +2,11 @@ from pegtree.pasm import *
 
 
 def TPEG(peg):
-    pRule(peg, "S", pRange(" \t　", ""))
+    pRule(peg, "S", pRange(" \t", ""))
     pRule(peg, "EOF", pNot(pAny()))
     pRule(peg, "NAME", pSeq2(pRange("_", "AZaz"), pManyRange("_.", "AZaz09")))
     pRule(peg, "UNAME", pOneMany(
-        pSeq2(pNotRange("(){}^[]&! \t\r\n　/|*+?.\'\"@:#", ""), pAny())))
+        pSeq2(pNotRange("(){}^[]&! \t\r\n/|*+?.\'\"@:#", ""), pAny())))
     pRule(peg, "Char", pSeq3(pChar("\'"), pNode(pMany(pOre2(pSeq2(pChar("\\"),
                                                                   pAny()), pSeq2(pNotChar("\'"), pAny()))), "Char", 0), pChar("\'")))
     pRule(peg, "DELIM1", pChar("\'\'\'"))
@@ -17,33 +17,33 @@ def TPEG(peg):
     pRule(peg, "Class", pSeq3(pChar("["), pNode(pMany(pOre2(pSeq2(
         pChar("\\"), pAny()), pSeq2(pNotChar("]"), pAny()))), "Class", 0), pChar("]")))
     pRule(peg, "Any", pSeq2(pChar("."), pNode(pEmpty(), "Any", -1)))
-    pRule(peg, "Tag", pSeq2(pChar("#"), pSeq2(pSeq2(pNotRange(" \t　\r\n}", ""),
-                                                    pAny()), pNode(pMany(pSeq2(pNotRange(" \t　\r\n}", ""), pAny())), "Tag", -1))))
+    pRule(peg, "Tag", pSeq2(pChar("#"), pSeq2(pSeq2(pNotRange(" \t\r\n}", ""),
+                                                    pAny()), pNode(pMany(pSeq2(pNotRange(" \t\r\n}", ""), pAny())), "Tag", -1))))
     pRule(peg, "EOL", pOre3(pChar("\n"), pChar("\r\n"), pRef(peg, "EOF")))
     pRule(peg, "Identifier", pNode(
         pOre2(pRef(peg, "NAME"), pRef(peg, "UNAME")), "Name", 0))
     pRule(peg, "COMMENT", pOre2(pSeq3(pChar("/*"), pMany(pSeq2(pNotChar("*/"), pAny())),
                                       pChar("*/")), pSeq2(pChar("//"), pMany(pSeq2(pNot(pRef(peg, "EOL")), pAny())))))
-    pRule(peg, "Doc1", pSeq(pChar("\'\'\'"), pManyRange(" \t　", ""), pRef(peg, "EOL"), pNode(pMany(
+    pRule(peg, "Doc1", pSeq(pChar("\'\'\'"), pManyRange(" \t", ""), pRef(peg, "EOL"), pNode(pMany(
         pSeq2(pNot(pSeq2(pChar("\'\'\'"), pRef(peg, "EOL"))), pAny())), "Doc", 0), pChar("\'\'\'")))
-    pRule(peg, "Doc2", pSeq(pChar("```"), pManyRange(" \t　", ""), pRef(peg, "EOL"), pNode(
+    pRule(peg, "Doc2", pSeq(pChar("```"), pManyRange(" \t", ""), pRef(peg, "EOL"), pNode(
         pMany(pSeq2(pNot(pSeq2(pChar("```"), pRef(peg, "EOL"))), pAny())), "Doc", 0), pChar("```")))
     pRule(peg, "Doc0", pNode(pMany(pSeq2(pNot(pRef(peg, "EOL")), pAny())), "Doc", 0))
     pRule(peg, "Ref", pOre2(pRef(peg, "Identifier"), pRef(peg, "Quoted")))
-    pRule(peg, "__", pMany(pOre3(pRange(" \t　", ""),
+    pRule(peg, "__", pMany(pOre3(pRange(" \t", ""),
                                  pRange("\r\n", ""), pRef(peg, "COMMENT"))))
-    pRule(peg, "_", pMany(pOre2(pRange(" \t　", ""), pRef(peg, "COMMENT"))))
+    pRule(peg, "_", pMany(pOre2(pRange(" \t", ""), pRef(peg, "COMMENT"))))
     pRule(peg, "Doc", pOre3(pRef(peg, "Doc1"),
                             pRef(peg, "Doc2"), pRef(peg, "Doc0")))
     pRule(peg, "Names", pNode(pSeq3(pRef(peg, "Identifier"), pRef(peg, "_"), pMany(
         pSeq4(pChar(","), pRef(peg, "_"), pRef(peg, "Identifier"), pRef(peg, "_")))), "", 0))
     pRule(peg, "EOS", pOre2(pSeq2(pRef(peg, "_"), pOneMany(pSeq2(pChar(";"),
                                                                  pRef(peg, "_")))), pOneMany(pSeq2(pRef(peg, "_"), pRef(peg, "EOL")))))
-    pRule(peg, "SS", pOre2(pSeq3(pRange(" \t　", ""), pRef(peg, "_"), pNot(pRef(peg, "EOL"))), pSeq3(
-        pOneMany(pSeq2(pRef(peg, "_"), pRef(peg, "EOL"))), pRange(" \t　", ""), pRef(peg, "_"))))
-    pRule(peg, "Import", pSeq2(pSeq2(pSeq2(pChar("from"), pRange(" \t　", "")), pNode(pSeq3(pRef(peg, "_"), pEdge("name", pOre2(pRef(peg, "Identifier"), pRef(peg, "Char"))),
-                                                                                           pOption(pSeq(pRef(peg, "_"), pChar("import"), pRange(" \t　", ""), pRef(peg, "_"), pEdge("names", pRef(peg, "Names"))))), "Import", -9)), pRef(peg, "EOS")))
-    pRule(peg, "Example", pSeq2(pSeq2(pSeq2(pChar("example"), pRange(" \t　", "")), pNode(pSeq3(pRef(peg, "_"),
+    pRule(peg, "SS", pOre2(pSeq3(pRange(" \t", ""), pRef(peg, "_"), pNot(pRef(peg, "EOL"))), pSeq3(
+        pOneMany(pSeq2(pRef(peg, "_"), pRef(peg, "EOL"))), pRange(" \t", ""), pRef(peg, "_"))))
+    pRule(peg, "Import", pSeq2(pSeq2(pSeq2(pChar("from"), pRange(" \t", "")), pNode(pSeq3(pRef(peg, "_"), pEdge("name", pOre2(pRef(peg, "Identifier"), pRef(peg, "Char"))),
+                                                                                           pOption(pSeq(pRef(peg, "_"), pChar("import"), pRange(" \t", ""), pRef(peg, "_"), pEdge("names", pRef(peg, "Names"))))), "Import", -9)), pRef(peg, "EOS")))
+    pRule(peg, "Example", pSeq2(pSeq2(pSeq2(pChar("example"), pRange(" \t", "")), pNode(pSeq3(pRef(peg, "_"),
                                                                                                pEdge("names", pRef(peg, "Names")), pEdge("doc", pRef(peg, "Doc"))), "Example", -15)), pRef(peg, "EOS")))
     pRule(peg, "Not", pSeq2(pChar("!"), pNode(
         pEdge("e", pRef(peg, "Predicate")), "Not", 0)))
