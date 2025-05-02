@@ -102,7 +102,7 @@ def parse_options(argv):
         '-O0': ('-O', 0),
         '-O1': ('-O', 1),
         '-O2': ('-O', 2),
-        '-O2': ('-O', 3),
+        '-O3': ('-O', 3),
     }
 
     def parse_each(a, d):
@@ -279,7 +279,7 @@ def parse(options, conv=None):
         except (EOFError, KeyboardInterrupt):
             pass
     elif len(inputs) == 1:
-        colorTree(read_inputs(inputs[0]))
+        colorTree(parser(read_inputs(inputs[0])))
     else:
         for file in options['inputs']:
             st = time.time()
