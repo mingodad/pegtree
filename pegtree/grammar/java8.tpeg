@@ -967,10 +967,10 @@ NAME = !DIGIT !KEYWORD W+
 Constant = Literal
 
 Literal =
-	/ FloatLiteral
-  / DoubleLiteral
+	FloatLiteral
+	/ DoubleLiteral
 	/ LongIntegerLiteral
-  / IntegerLiteral
+	/ IntegerLiteral
 	/ BooleanLiteral
 	/ CharacterLiteral
 	/ StringLiteral
