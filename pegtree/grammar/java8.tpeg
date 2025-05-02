@@ -78,7 +78,7 @@ EOL          = '\r'? '\n' / EOF
 "->"         = '->' _
 
 KEYWORD
-	= "abstract"
+	= ("abstract"
 	/ "assert"
 	/ "boolean"
 	/ "break"
@@ -130,7 +130,7 @@ KEYWORD
 	/ "try"
 	/ "void"
 	/ "volatile"
-	/ "while"
+	/ "while") !W
 
 /* Annotation, Modifiers */
 
@@ -270,7 +270,8 @@ EnumDeclaration = {
 	(impl: "implements" ClassOrInterfaceTypes)?
 	"{"
 	list: EnumeratorList ","?
-	(";" body: ClassBody / ";"?)
+	(";" body: (ClassMember)* / ";"?)
+	"}"
 	#EnumDecl
 }
 
